@@ -379,8 +379,7 @@ namespace KCB2
                     UpdateDetailStatus("母港BGMを変更しました");
                     break;
 
-                    //無視するAPI勢
-                    
+                #region    //　無視するAPI勢
                 case "/kcsapi/api_get_member/unsetslot":
                 case "/kcsapi/api_get_member/useitem":
                 case "/kcsapi/api_get_member/furniture":
@@ -415,7 +414,14 @@ namespace KCB2
 
                 case "/kcsapi/api_req_map/select_eventmap_rank":
 
+                case "/kcsapi/api_world/get_worldinfo":                 // ゲーム初回開始時のサーバー一覧
+                case "/kcsapi/api_world/register":                      // サーバーを選択した時
+                case "/kcsapi/api_req_init/nickname":                   // 提督の名前を決定した時
+                case "/kcsapi/api_req_init/firstship":                  // チュートリル完了時
+                case "/kcsapi/api_req_member/update_tutorial_progress": // 建造チュートリアル
+
                     break;
+                #endregion
 
                 default:
                     _parent.UpdateStatus("未知のAPIを検出しました");
