@@ -351,6 +351,52 @@ namespace KCB
             public string api_result_msg { get; set; }
             public ApiData api_data { get; set; }
         }
+
+        /// <summary>
+        /// 艦隊プリセット情報 /kcsapi/api_get_member/preset_deck
+        /// </summary>
+        [Obfuscation(Exclude = true)]
+        public class PDeck
+        {
+            [Obfuscation(Exclude = true)]
+            public class ApiData
+            {
+                public class ApiDeck
+                {
+                    public class Preset
+                    {
+                        public string api_preset_no { get; set; }
+                        public string api_name { get; set; }
+                        public string api_name_id { get; set; }
+                        public List<int> api_ship { get; set; }
+                    }
+                    // 数字から始まるKeyに対する対応。Keyと言うからには配列ではないのでベタ書き
+                    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "1")]
+                    public Preset _0031_ { get; set; }
+                    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "2")]
+                    public Preset _0032_ { get; set; }
+                    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "3")]
+                    public Preset _0033_ { get; set; }
+                    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "4")]
+                    public Preset _0034_ { get; set; }
+                    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "5")] // 2015/10/30 メンテの実装時の最大
+                    public Preset _0035_ { get; set; }
+                    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "6")]
+                    public Preset _0036_ { get; set; }
+                    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "7")]
+                    public Preset _0037_ { get; set; }
+                    [Newtonsoft.Json.JsonPropertyAttribute(PropertyName = "8")] // 2015/12/28 メンテにて8つまで拡大
+                    public Preset _0038_ { get; set; }
+                }
+
+                public string api_max_num { get; set; }
+                public ApiDeck api_deck { get; set; }
+            }
+            public int api_result { get; set; }
+            public string api_result_msg { get; set; }
+            public ApiData api_data { get; set; }
+        }
+        
     }
 
     /*
