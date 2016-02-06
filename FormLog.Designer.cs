@@ -560,6 +560,8 @@
             // 
             // chartMaterial
             // 
+            chartArea1.CursorX.IsUserEnabled = true;
+            chartArea1.CursorX.IsUserSelectionEnabled = true;
             chartArea1.Name = "ChartArea1";
             this.chartMaterial.ChartAreas.Add(chartArea1);
             this.chartMaterial.Dock = System.Windows.Forms.DockStyle.Fill;
