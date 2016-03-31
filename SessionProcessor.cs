@@ -379,22 +379,7 @@ namespace KCB2
                     UpdateDetailStatus("母港BGMを変更しました");
                     break;
 
-                case "/kcsapi/api_get_member/preset_deck":
-                    // 艦隊編成パターンの取得
-                    PresetDeck(responseJson);
-                    break;
-
-                case "/kcsapi/api_req_hensei/preset_register":
-                    // 艦隊編成パターンの記録
-                    DeckMemberUpdate(queryParam);
-                    break;
-
-                case "/kcsapi/api_req_hensei/preset_select":
-                    // 艦隊編成パターンの展開
-                    DeckMemberChange(queryParam);
-                    break;
-
-                #region    //無視するAPI勢
+                #region    //　無視するAPI勢
                 case "/kcsapi/api_get_member/unsetslot":
                 case "/kcsapi/api_get_member/useitem":
                 case "/kcsapi/api_get_member/furniture":

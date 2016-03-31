@@ -33,11 +33,6 @@ namespace KCB2.MemberData
         ConcurrentDictionary<int, ShipDeckData> _deckMember = new ConcurrentDictionary<int, ShipDeckData>();
 
         /// <summary>
-        /// 艦隊編成記録データ
-        /// </summary>
-        List<PresetData> _preset = new List<PresetData>();
-
-        /// <summary>
         /// 艦隊情報を更新。生JSON受け
         /// </summary>
         /// <param name="json"></param>
@@ -80,56 +75,6 @@ namespace KCB2.MemberData
 
             return true;
         }
-
-        /// <summary>
-        /// 艦隊編成記録を更新(全データ更新)
-        /// </summary>
-        /// <param name="JSON"></param>
-        /// <param name="masterMission"></param>
-        /// <returns></returns>
-        public bool UpdatePreset(KCB.api_get_member.PDeck json, MasterData.Mission masterMission)
-        {
-            lock (_preset)
-            {
-                // JSONデータの都合上ベタ書きなのでリストにする
-                _preset.Clear();
-                List<dynamic> presetList = new List<dynamic>();
-                presetList.Add(json.api_data.api_deck._0031_);
-                presetList.Add(json.api_data.api_deck._0032_);
-                presetList.Add(json.api_data.api_deck._0033_);
-                presetList.Add(json.api_data.api_deck._0034_);
-                presetList.Add(json.api_data.api_deck._0035_);
-                presetList.Add(json.api_data.api_deck._0036_);
-                presetList.Add(json.api_data.api_deck._0037_);
-                presetList.Add(json.api_data.api_deck._0038_);
-                foreach (var preset in presetList)
-                {
-                    if (preset != null)
-                    {
-                        _preset.Add(new PresetData(preset));
-                    }
-                }
-            }
-            return true;
-        }
-
-        
-        /// <summary>
-        /// 艦隊編成記録を保存
-        /// </summary>
-        /// <param name="fleet">記録しようとしている艦隊データ</param>
-        /// <param name="preset">記録先のプリセットデータ</param>
-        /// <returns></returns>
-        public bool SavePreset(MemberData.Deck.Fleet fleet, MemberData.Deck.PresetData preset)
-        {
-            lock (_preset)
-            {
-                preset.Member.Clear();
-                preset.Member.AddRange(fleet.Member);
-            }
-            return true;
-        }
-
 
         /// <summary>
         /// 艦隊一覧が更新されたので艦隊メンバーハッシュを更新
@@ -287,55 +232,6 @@ namespace KCB2.MemberData
             //deckが更新されたので反映させる
             UpdateShipDeckDataList(masterMission);
 
-        }
-
-
-        
-        /// <summary>
-        /// 艦隊メンバー変更（プリセット展開）
-        /// /kcsapi/api_req_hensei/preset_select
-        /// </summary>
-        /// <param name="req">リクエスト</param>
-        /// <param name="memberShip">艦隊メンバー情報</param>
-        public void OpenPresetDeckMember(IDictionary<string, string> req, Ship memberShip, MasterData.Mission masterMission)
-        {
-            // 操作する艦隊番号(1Base)
-            int deck_id = int.Parse(req["api_deck_id"]);
-            // 展開するプリセット番号(1Base)
-            int preset_no = int.Parse(req["api_preset_no"]);
-
-            // deckの操作を開始するのでlockする
-            lock (_deck)
-            {
-                // 全員外す
-                int member = _deck[deck_id - 1].Member.Count - 1;
-                for (int idx = member; idx >= 0; idx--)
-                {
-                    _removeShip(idx, deck_id);
-                }
-            }
-
-            // deckが更新されたので反映させる (以下のGetShipDeckDataの利用で一旦更新が必要)
-            UpdateShipDeckDataList(masterMission);
-
-            lock (_deck)
-            {
-                // プリセットの情報を取得して展開
-                foreach (int idx in _preset[preset_no - 1].Member)
-                {
-                    ShipDeckData test = GetShipDeckData(idx);
-
-                    // 別艦隊に配備されている艦船は除く
-                    if (GetShipDeckData(idx) == null)
-                    {
-                        _deck[deck_id - 1].Member.Add(idx);
-                    }
-                    
-                }
-            }//lock
-
-            //deckが更新されたので反映させる
-            UpdateShipDeckDataList(masterMission);
         }
 
         /// <summary>
@@ -616,43 +512,6 @@ namespace KCB2.MemberData
                 Order = ship_order;
             }
         }
-
-        /// <summary>
-        /// 艦隊編成記録を返す(要lock)
-        /// </summary>
-        public IEnumerable<PresetData> PresetList
-        {
-            get
-            {
-                return _preset;
-            }
-        }
-
-        /// <summary>
-        /// 艦隊編成記録情報
-        /// </summary>
-        public class PresetData
-        {
-            /// <summary>
-            /// 艦隊メンバ
-            /// </summary>
-            public List<int> Member { get; private set; }
-
-            public PresetData(KCB.api_get_member.PDeck.ApiData.ApiDeck.Preset json)
-            {
-                List<int> shipList = new List<int>();
-
-                foreach (var ship in json.api_ship)
-                {
-                    if (ship == -1)
-                        continue;
-
-                    shipList.Add(ship);
-                }
-                Member = shipList;
-            }
-        }
-        
     }
 
 }

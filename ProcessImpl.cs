@@ -204,41 +204,9 @@ namespace KCB2
 
         }
 
-        /// <summary>
-        /// 艦隊編成記録を更新
-        /// /kcsapi/api_get_member/preset_deck
-        /// </summary>
-        /// <param name="responseJson"></param>
-        void PresetDeck(string responseJson)
-        {
-            var json = JsonConvert.DeserializeObject<KCB.api_get_member.PDeck>(responseJson);
-            if ((int)json.api_result != 1)
-                return;
-
-            _memberDeck.UpdatePreset(json, _masterMission);
-        }
-
-        void DeckMemberUpdate(IDictionary<string, string> queryParam)
-        {
-            int saveDeckNo = int.Parse(queryParam["api_deck_id"]) - 1;       // 記録しようとしている艦隊No. (-1して0Baseにする)
-            int savePresetNo = int.Parse(queryParam["api_preset_no"]) - 1;   // 記録先のプリセットNo. (-1して0Baseにする)
-
-            // 艦隊編成記録を保存
-            _memberDeck.SavePreset(_memberDeck.DeckList.ToArray()[saveDeckNo], _memberDeck.PresetList.ToArray()[savePresetNo]);
-        }
-
         void DeckMemberChange(IDictionary<string, string> queryParam)
         {
-            if(queryParam.ContainsKey("api_preset_no"))
-            {
-                // プリセット展開
-                _memberDeck.OpenPresetDeckMember(queryParam, _memberShip, _masterMission);
-            }   
-            else
-            {
-                // 通常の編成変更
-                _memberDeck.ChangeDeckMember(queryParam, _memberShip,_masterMission);
-            }
+            _memberDeck.ChangeDeckMember(queryParam, _memberShip,_masterMission);
             _memberShip.UpdateDeckInfo(_memberDeck);
 
             _parent.UpdateDeckMemberList(_memberShip, _memberDeck.DeckList);
