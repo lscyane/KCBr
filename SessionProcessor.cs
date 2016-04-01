@@ -461,6 +461,10 @@ namespace KCB2
                 case "/kcsapi/api_req_init/firstship":                  // チュートリル完了時
                 case "/kcsapi/api_req_member/update_tutorial_progress": // 建造チュートリアル
 
+                case "/kcsapi/api_req_combined_battle/goback_port":
+
+                case "/kcsapi/api_dmm_payment/paycheck":
+
                     break;
 
                 default:
