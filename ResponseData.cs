@@ -1005,7 +1005,7 @@ namespace KCB
                 public int api_id { get; set; }
                 public int api_sortno { get; set; }
                 public string api_filename { get; set; }
-                public string api_version { get; set; }
+                public string[] api_version { get; set; }
                 public int[] api_boko_n { get; set; }
                 public int[] api_boko_d { get; set; }
                 public int[] api_kaisyu_n { get; set; }
