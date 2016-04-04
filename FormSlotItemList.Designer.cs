@@ -35,10 +35,14 @@
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.tbSearchBox = new System.Windows.Forms.ExtendedControl.PlaceholdTextBox();
             this.SuspendLayout();
             // 
             // lvSlotItemList
             // 
+            this.lvSlotItemList.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.lvSlotItemList.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2,
@@ -46,13 +50,12 @@
             this.columnHeader4,
             this.columnHeader5,
             this.columnHeader6});
-            this.lvSlotItemList.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lvSlotItemList.FullRowSelect = true;
             this.lvSlotItemList.GridLines = true;
-            this.lvSlotItemList.Location = new System.Drawing.Point(0, 0);
+            this.lvSlotItemList.Location = new System.Drawing.Point(0, 18);
             this.lvSlotItemList.Name = "lvSlotItemList";
             this.lvSlotItemList.ShowItemToolTips = true;
-            this.lvSlotItemList.Size = new System.Drawing.Size(650, 368);
+            this.lvSlotItemList.Size = new System.Drawing.Size(650, 343);
             this.lvSlotItemList.TabIndex = 0;
             this.lvSlotItemList.UseCompatibleStateImageBehavior = false;
             this.lvSlotItemList.View = System.Windows.Forms.View.Details;
@@ -87,16 +90,33 @@
             this.columnHeader6.Text = "装備艦娘";
             this.columnHeader6.Width = 350;
             // 
+            // tbSearchBox
+            // 
+            this.tbSearchBox.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.tbSearchBox.ForeColor = System.Drawing.Color.LightGray;
+            this.tbSearchBox.Location = new System.Drawing.Point(0, 0);
+            this.tbSearchBox.Name = "tbSearchBox";
+            this.tbSearchBox.PlaceholderColor = System.Drawing.Color.LightGray;
+            this.tbSearchBox.PlaceholderText = "種別、装備名から検索";
+            this.tbSearchBox.Size = new System.Drawing.Size(650, 19);
+            this.tbSearchBox.TabIndex = 1;
+            this.tbSearchBox.Text = "種別、装備名から検索";
+            this.tbSearchBox.TextChanged += new System.EventHandler(this.tbSearchBox_TextChanged);
+            // 
             // FormSlotItemList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(650, 368);
+            this.Controls.Add(this.tbSearchBox);
             this.Controls.Add(this.lvSlotItemList);
             this.Name = "FormSlotItemList";
             this.Text = "装備一覧";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormSlotItemList_FormClosing);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -109,5 +129,6 @@
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.ColumnHeader columnHeader5;
         private System.Windows.Forms.ColumnHeader columnHeader6;
+        private System.Windows.Forms.ExtendedControl.PlaceholdTextBox tbSearchBox;
     }
 }

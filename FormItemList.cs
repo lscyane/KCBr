@@ -13,6 +13,7 @@ namespace KCB2
 {
     public partial class FormItemList : Form
     {
+        private IEnumerable<MemberData.Item.Info> masterItems;
 
         public FormItemList(ImageList iconImageList)
         {
@@ -45,6 +46,9 @@ namespace KCB2
 
         public void UpdateItemList(IEnumerable<MemberData.Item.Info> items)
         {
+            // マスターデータ更新
+            this.masterItems = items;
+
             if (InvokeRequired)
                 BeginInvoke((MethodInvoker)(() => updateItemListView(items)));
             else
@@ -159,6 +163,9 @@ namespace KCB2
                 Properties.Settings.Default.ItemListBounds = Bounds;
             else
                 Properties.Settings.Default.ItemListBounds = RestoreBounds;
+
+            // Close時にテキストボックスをクリア
+            tbSearchBox.Clear();
         }
 
         private void lvItemList_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -451,6 +458,67 @@ namespace KCB2
                         throw new NotImplementedException("ItemListViewItem compare unknown column" + _column.ToString());
                 }
             }
+        }
+
+        private void tbSearchBox_TextChanged(object sender, EventArgs e)
+        {
+            if (this.masterItems != null)
+            {
+#if false       // updateItemListViewを使い回すとupdateMapのUpdateがボトルネックになる(約3ms×装備数)
+                // 装備まとめて表示の場合は数が少ないので気にならないが、一覧表示は数が多い
+                // 検索表示は情報の更新も不要なのでリストを一から作り直したほうがまだ早い
+                //updateItemListView(SerchboxPartialmatch(this.masterItems));
+#else
+                IEnumerable<MemberData.Item.Info> items = SerchboxPartialmatch(this.masterItems);
+                lvItemList.BeginUpdate();
+                lvItemList.Items.Clear();
+                foreach (MemberData.Item.Info it in items)
+                {
+                     ItemListViewItem lvit = new ItemListViewItem(it);
+                     lvItemList.Items.Add(lvit);
+                }
+                updateFormTitle();
+                lvItemList.EndUpdate();
+#endif
+            }
+        }
+
+
+        /// <summary>
+        /// 検索テキストボックスに部分一致するデータを取得する
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns>items</returns>
+        private IEnumerable<MemberData.Item.Info> SerchboxPartialmatch(IEnumerable<MemberData.Item.Info> items)
+        {
+            IEnumerable<MemberData.Item.Info> retval;
+
+            if (tbSearchBox.IsEmpty)
+            {
+                // 未入力の時はそのまま出力
+                retval = items;
+            }
+            else
+            {
+                // 指定の文字列が含まれるもののみを出力する
+                List<MemberData.Item.Info> machedItems = new List<MemberData.Item.Info>();
+                foreach (var it in items)
+                {
+                    // 名称から一致を検索
+                    if (it.Name.IndexOf(tbSearchBox.Text) >= 0)
+                    {
+                        machedItems.Add(it);
+                    }
+                    // 種類から一致を検索
+                    else if (it.Type.IndexOf(tbSearchBox.Text) >= 0)
+                    {
+                        machedItems.Add(it);
+                    }
+                }
+                retval = machedItems;
+            }
+
+            return retval;
         }
     }
 }

@@ -13,6 +13,8 @@ namespace KCB2
 {
     public partial class FormSlotItemList : Form
     {
+        private IEnumerable<MemberData.Item.Info> masterItems;
+
         public FormSlotItemList(ImageList iconImageList)
         {
             InitializeComponent();
@@ -50,6 +52,9 @@ namespace KCB2
         /// <param name="items"></param>
         public void UpdateSlotItemList(IEnumerable<MemberData.Item.Info> items)
         {
+            // マスターデータ更新
+            this.masterItems = items;
+
             if (InvokeRequired)
                 BeginInvoke((MethodInvoker)(() => _updateSlotItemList(items)));
             else
@@ -435,6 +440,9 @@ namespace KCB2
                 Properties.Settings.Default.SlotItemListBounds = Bounds;
             else
                 Properties.Settings.Default.SlotItemListBounds = RestoreBounds;
+
+            // Close時にテキストボックスをクリア
+            tbSearchBox.Clear();
         }
 
         private void lvSlotItemList_ColumnClick(object sender, ColumnClickEventArgs e)
@@ -442,6 +450,53 @@ namespace KCB2
             SlotItemLVItem.Column = e.Column;
             lvSlotItemList.Sort();
             lvSlotItemList.SetSortIcon(e.Column, SlotItemLVItem.Order);
+        }
+
+
+        private void tbSearchBox_TextChanged(object sender, EventArgs e)
+        {
+            if (this.masterItems != null)
+            {
+                _updateSlotItemList(SerchboxPartialmatch(this.masterItems));
+            }
+        }
+
+
+        /// <summary>
+        /// 検索テキストボックスに部分一致するデータを取得する
+        /// </summary>
+        /// <param name="items"></param>
+        /// <returns>items</returns>
+        private IEnumerable<MemberData.Item.Info> SerchboxPartialmatch(IEnumerable<MemberData.Item.Info> items)
+        {
+            IEnumerable<MemberData.Item.Info> retval;
+
+            if (tbSearchBox.IsEmpty)
+            {
+                // 未入力の時はそのまま出力
+                retval = items;
+            }
+            else
+            {
+                // 指定の文字列が含まれるもののみを出力する
+                List<MemberData.Item.Info> machedItems = new List<MemberData.Item.Info>();
+                foreach (var it in items)
+                {
+                    // 装備名から一致を検索
+                    if (it.Name.IndexOf(tbSearchBox.Text) >= 0)
+                    {
+                        machedItems.Add(it);
+                    }
+                    // 種別から一致を検索
+                    else if (it.Type.IndexOf(tbSearchBox.Text) >= 0)
+                    {
+                        machedItems.Add(it);
+                    }
+                }
+                retval = machedItems;
+            }
+
+            return retval;
         }
     }
 }

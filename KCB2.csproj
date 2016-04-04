@@ -121,6 +121,9 @@
     <Compile Include="EnemyFleetList.Designer.cs">
       <DependentUpon>EnemyFleetList.cs</DependentUpon>
     </Compile>
+    <Compile Include="ExtendedControl\PlaceholdTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="FleetList.cs">
       <SubType>UserControl</SubType>
     </Compile>
