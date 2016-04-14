@@ -142,6 +142,23 @@ namespace KCB2.BattleResult
         }
 
         /// <summary>
+        /// 交戦形態を取得する
+        /// ProcessBattle内のinitializeShipDataで更新
+        /// </summary>
+        /// <returns>交戦形態を示す文字列</returns>
+        public string GetMatchState()
+        {
+            if (_battleResult != null)
+            {
+                return _battleResult.MatchState.ToString();
+            }
+            else
+            {
+                return "";
+            }
+        }
+
+        /// <summary>
         /// /kcsapi/api_req_battle_midnight/battle
         /// 夜戦開始
         /// </summary>

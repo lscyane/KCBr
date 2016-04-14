@@ -241,7 +241,7 @@ namespace KCB2
                             _memberShip, _memberDeck, _masterShip, _masterItem);
                         _statusManager.StartBattle();
 
-                        UpdateDetailStatus("戦闘を開始しました");
+                        UpdateDetailStatus(_battleResultManager.GetMatchState() + "で戦闘を開始しました");
                         _parent.BeginWaitForNightBattle(battleWait, _battleResultManager.GetBattleResult());
                         break;
                     }
